@@ -3,11 +3,13 @@ sudo: required
 services:
   - docker
 
-before_install:
-  - docker build -t vijay20886/selenium1 -f Dockerfile .
+#before_install:
+#  - docker build -t vijay20886/selenium1 -f Dockerfile .
+#  - docker-compose up -d --build
 
 script:
-  - docker run -e CI=true vijay20886/selenium1 mvn clean test
+#  - docker run -e CI=true vijay20886/selenium1 mvn clean test
+  - docker-compose up -d --build
 
 deploy:
   provider: elasticbeanstalk
