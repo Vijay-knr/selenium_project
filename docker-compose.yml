@@ -19,3 +19,18 @@ services:
     environment:
       - HUB_PORT_4444_TCP_ADDR=selenium-hub
       - HUB_PORT_4444_TCP_PORT=4444
+  my-project:
+#    image: vijay20886/simpleselenium
+    build: .
+    command: mvn clean verify
+    volumes:
+      - /target
+      - .:/usr/src/app
+    restart: on-failure
+    depends_on:
+      - selenium-hub
+      - firefox
+      - chrome
+    environment:
+      - HUB=selenium-host
+#${docker inspect -f "{{ .NetworkSettings.Networks.selenium_project_default.IPAddress}}" selenium-hub}
