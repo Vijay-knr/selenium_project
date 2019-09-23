@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d5d8aa64-c065-4b8a-ba14-7aaa210ea28c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/GoogleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/GoogleTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="d5d8aa64-c065-4b8a-ba14-7aaa210ea28c" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,7 +43,7 @@
       <file leaf-file-name="GoogleTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/GoogleTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
+            <state relative-caret-position="107">
               <caret line="27" column="44" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -145,24 +139,6 @@
             <path>
               <item name="selenium_project" type="b2602c69:ProjectViewProjectNode" />
               <item name="selenium_project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="selenium_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="selenium_project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="selenium_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="selenium_project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="selenium_project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="selenium_project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="selenium_project" type="b2602c69:ProjectViewProjectNode" />
@@ -375,18 +351,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="812" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32969698" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.1037196" side_tool="true" visible="true" weight="0.54125875" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.1037196" side_tool="true" visible="true" weight="0.4923077" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.486676" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.8962804" visible="true" weight="0.54125875" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.8962804" visible="true" weight="0.4923077" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18240343" />
@@ -699,7 +674,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/GoogleTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
+        <state relative-caret-position="107">
           <caret line="27" column="44" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
