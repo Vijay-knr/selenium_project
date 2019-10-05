@@ -1,0 +1,707 @@
+AWS CERTIFICATION NOTES:
+
+===========================================================================================
+Lecture 11 - Creating an S3 bucket:
+
+1. N. Virginia is the region where all AWS products will roll out first.
+2. If we select a region that is relatively new then we may not see all the services.
+3. Buckets are universal namespace, hence you can't have duplicate names
+4. When we upload any file successfully it returns 200 OK.
+5. Not suitable to install an operating system on.
+===========================================================================================
+
+Lecture 12 - S3 security and encryption
+1. By default all the buckets we create are private
+2. We can setup the access control to the bucket by using, bucket policies and access control list (ACL)
+3. Bucket policies work at individual bucker level, where as ACL go all the way up to individual object level
+4. For s3 buckets, We can configure to see who is accessing our bucket by creating access logs, these logs can be sent to another bucket or bucket in an another AWS account.
+
+5. Encryption in transit is achieved by SSL/TLS
+6. Encryption at Rest (server side) achieved by
+   - S3 managed keys (SSE - S3), Amazon manages all the keys
+   - AWS key management service, managed keys - (SSE - KMS) both customer and AWS manages
+   - Server side encryption with customer provided key (SSE - C), only customer manages
+Client side encryption, that's where you encrypt on your side and upload to S3
+===========================================================================================
+
+Lecture 13 - S3 Versioning
+Using versioning with S3
+1. Stores all versions of an object including all writes and even if you delete an object
+2. Versioning is a great backup tool
+3. Once versioning is enabled, it cannot be disabled, only it can be suspended, you can delete a bucket and re-create it
+4. Integrates with lifecycle rules
+5. It also comes with MFA delete capability, which uses multi factor authentication, can be used to provide an additional security, this avoids any accidental deletion of an object
+6. When we enable the versioning, if one object has multiple versions then size of that object is some of the sizes of each version we upload, so before we turn on the versioning feature as an architect we need to remember size grows exponentially.
+7. When we upload a new version to an object, that latest version of the object is by default private, we need to make it pubic explicitly
+8. If an object has, say 3 versions, when we delete the object, it doesn't actually delete all the versions, it just creates an another version with delete marker,
+ to restore the deletion, we need to delete the version with that delete marker on.
+9. We can delete a particular version of an object, it doesn't delete other versions.
+===========================================================================================
+
+Lecture 14 - S3 Life cycle management and Glacier
+Create a bucket --> open a basket ---> Properties tab  --> Life cycle Management
+1. Automates moving your objects between different storage tiers
+2. Can be used in conjunction with versioning
+3. Can be applied to current version or for previous versions
+
+===========================================================================================
+
+Lecture 15 - S3 Cross region replication - LAB
+1. Create a bucket --> open a basket ---> Management tab  --> Replication --> Add rule
+2. To do the cross region replication we must turn on the enabling the versions on both source and destination Buckets
+3. Regions must be unique
+4. Files in an existing bucket can't be automatically replicated if we enable the cross region replication, but when we create a new object it will be replicated.
+5. All subsequent updates will be automatically replicated.
+6. Deleting versions or Deleting markers are not replicated.
+
+===========================================================================================
+
+Lecture 16 - S3 Transfer acceleration
+1. Let's say we have an S3 bucket in UK, and if users across the world has an ability to upload their objects to their own edge location via their URL and then with the Amazon's cloud front edge network capability these objects will be transferred to the original bucket that is in the UK
+2. Search in the Google for "s3 transfer acceleration tool" then you will see the difference speeds if we use the transfer acceleration.
+===========================================================================================
+
+Lecture 17 - Cloud front
+1. It is a CDN  (Content delivery network) is a system of distributed servers(networks) that deliver webpages and other web content to a user
+based on the geographic locations of the user, the origin of the web page, and a content delivery server.
+2. Edge Location: This is the location where the content will be cached, this is different to AWS region or availability zone.
+3.Origin: Origin of all the files that the CDN will distribute, this can be an s3 bucket, an EC2 instance, an Elastic load balancer, or route53
+4.Distribution: This is the name given to the CDN which consists of a collection of edge locations.
+5.Web distribution: Typically used for websites.
+6.RTMP: Used for media streaming.
+7. Edge locations are not just READ only but we can write to them, you can write them too, we have seen in the previous lecture.(Putting an object on the edge location)
+8. Objects are cached in edge locations until Time To Live (TTL, we can configure this)
+9. We can clear the cached objects, but you will be charged for this. Invalidating cache content, it is important topic for the exam
+
+===========================================================================================
+
+Lecture 18 - Cloud front LAB
+1. We can create the distribution form - Under networking --> CloudFront --> Create distribution --> Web or RTMP --> and configure the distribution form that page.
+2. It is not covered under free tier, so make sure we delete if it is not required.
+3. Once we create the distribution we can always go in to it and we can edit the distribution settings, cloud front --> select the distribution --> distribution settings
+4. We can invalidate through ---->  cloud front --> select the distribution --> distribution settings -> Invalidations  --> Create invalidation
+5. We can invalidate the individual object or entire directories and or entire sub directories etc; once we invalidate the content will not be in edge location any longer.
+6. Once we create the distribution we can disable it first before we can delete it.
+
+===========================================================================================
+
+Lecture 19 - Snowball
+
+1. Snowball is a petabyte-scale data transport solutions that uses secure appliances to transfer large amounts of data into and out of AWS.
+2. It address some of the most common challenges with large dat transfers which include high network costs, long transfer times and security concerns.
+3. Snowball is simple, fast, secure and can be as little as one-fifth the cost of the high speed internet.
+4. Snowball comes in two flavours 50TB or 80TB size.
+5. Snowball uses multiple layers of security it includes;
+  A. tamper-resistant enclosures
+  B. 256-bit Encryption
+  C. An industry standard trusted platform module (TPM) designed to ensure the security and full-chain of custody of your data.
+6. Once the data transfer job is processed and verifies, AWS performs a software erasure of the snowball appliance.
+
+Snowball edge:
+
+7. We also have snowball edge, it is a 100TB data transfer device with onboard storage and compute capabilities.
+8. We can use snowball edge;
+  A. To move large amounts of data into and out of AWS
+  B. As a temporary storage tier for large data sets.
+  C. To support local workloads in remote or offline locations.
+9. Snowball edge connects to your existing application and infrastructure using standard storage interfaces, streamlining your data transfer process and minimizing setup and integration.
+10. Snow ball edge can cluster together to form a local storage tier and process your data on-premises, helping to ensure your applications continue to run even if they are not able to access the cloud. Kind of portable version of AWS.
+
+AWS snowmobile
+11. snowmobile is a hexabyte-scale data transfer service used to move extremely large amounts of data in and out of AWS. We can transfer up to 100PB using snowmobile, a 45 footlong shipping container
+12. It makes it easy to move massive volumes data to the cloud, including video libraries, image repos, or complete data centre migration.
+13. It is secure, fast and cost effective.
+
+===========================================================================================
+
+Lecture 20 - Snowball lab funny one
+
+===========================================================================================
+
+Lecture 21 - Storage gateway (May not be the exam topic)
+
+NEED TO LOOK AT THIS LATER
+
+===========================================================================================
+Lecture 22 - Summary
+Quiz
+
+
+===========================================================================================
+Lecture 23 - EC2 101 (Elastic compute Cloud)
+
+1. EC2 is a web service that provides resizable compute capacity in the cloud
+2. Amazon EC2 reduces the time required by obtain and boot new server instance to minutes.
+3. It allows you to quickly scale capacity both up and down, depending on your requirements.
+
+EC2 pricing models
+On demand pricing model:
+1. Allows you to pay fixed rate by the hours( or seconds) with no commitment.
+2. Suitable for Low cost flexible EC2 instance + No upfront payment + No long term commitment.
+3. Suitable for Applications with Short term, spiky or unpredictable workloads that can't be interrupted.
+4. Applications being developed and tested on Amazon EC2 for the first time.
+
+Reserved pricing model:
+1. Provides you with a capacity reservation, and offer significant discount on the hourly charge for an instance. contract terms are 1 year or 3 years.
+2. Suitable for steady state or predictable usage.
+3. Applications that require reserved capacity.
+4. Users able to make upfront payments to reduce their total computing costs even further.
+Reserved pricing types:
+1. Standard reserved instances: These offer up to 75% cheaper than on-demand instance, Longer the contract + more you pay upfront = greater discount
+2. Convertible reserved instances: These offer up to 54% cheaper than on-demand instance. Here we can change the configuration of the actual instance for example you can have high RAM, powerful CPU's
+3. Scheduled reserved instances: We can launch in a specific time window, matches the capacity reservation to a predictable recurring schedule window that requires only a fraction of a day, week or a month.
+
+
+Spot pricing model:
+1. Enables you to bid for whatever price you want for instance capacity, providing for even greater savings if your applications have flexible start and end times.
+2. Amazon's excess capacity offers on a lower rate.
+3. Suitable for applications with flexible start and end times, if Amazon wants capacity back it can terminate the applications.
+4. If amazon terminates the app, it won't charge for that partially used hour, but if we terminate it, we need to pay for it.
+5. Applications that are only feasible at very low compute prices.
+6. Users with urgent computing needs for large amounts of additional capacity.
+
+
+Dedicated hosts pricing model:
+1. Physical EC2 server dedicated for your use. It reduce costs by allowing you to use your existing server bound software licences.
+2. Useful for regulatory requirements that may not support multi-tenant virtualisation
+3. Great for licensing which doesn't support multi-tenancy or cloud deployments. For example Oracle
+4. Can be purchased on demand (pay hourly)
+5. Can be purchased as a reservation for up to 70% off the on demand price.
+
+===========================================================================================
+Lecture 24 - EC2 Lab Part1
+
+===========================================================================================
+Lecture 25 - EC2 Lab Part2
+
+1. Termination protection is turned off by default, you must turn it on.
+2. on an EBS backed instance, the default action is for the root EBS volume to be deleted when the instance is terminated.
+3. EBS root volumes of your DEFAULT AMI's can't be encrypted. You can use a third party tool (such as the bit locker) to encrypt the root volume, or this can be done when we creating the AMI's in the console or using the API
+4. Additional volumes can be encrypted.
+5. Root volume is nothing but the volume in which the OS is installed.
+
+===========================================================================================
+Lecture 26 - EC2 Security groups
+1. If we update the security group rule, that change takes immediate affect (Security group can be found under instance under the network section)
+2. All outbound traffic is allowed, Security groups are Stateful, if we set inbound rules, it automatically creates the outbound rule, if you allow something it automatically allows to out as well.
+3. All inbound traffic is blocked by default, if you want to allow a particular IP/port we have to setup through this security groups
+4. Using security groups we can't black list an IP or port.
+5. We can attach more than one security group to an instance, select the instance --> Actions --> networking --> change security groups -- assign security group
+6. You can have any number of EC2 instances within a security group.
+
+===========================================================================================
+Lecture 27 - EBS volumes (Elastic block store)
+
+1. EBS is a virtual hard disk in the cloud, provide persistent block storage volumes for use with EC2 instances in the AWS cloud. Each AWS EBS volume is replicated in it's own availability zone to protect you from the component failure, offering high availability and durability.
+
+5 different flavours
+1. General purpose (SSD, gp2): Best of both price and performance for a wide variety of transactional workloads
+    API Name: gp2
+    IOPS: 16000
+    Used For: Most workloads
+    Volume size: 1 GiB to 16Tib
+
+2. Provisioned IOPS (SSD) - Highest performance SSD, Fast inputs and outputs per second, designed for mission critical applications
+   API Name: io1
+   IOPS: 64000
+   Used For: Databases
+   Volume size: 4 GiB to 16Tib
+
+3. Throughput optimised hard disk drive (HDD, st1) - Physical one, Low cost HDD, designed for frequently sued workloads, throughput intensive workloads
+   API Name: st1
+   IOPS: 500
+   Used For: Used for Big data and data warehouses
+   Volume size: 500 GiB to 16Tib
+
+4. Cold hard disk drive (HDD) - Lowest cost HDD, designed for less frequently accessed workloads
+   API Name: sc1
+   IOPS: 250
+   Used For: File servers
+   Volume size: 500 GiB to 16Tib
+
+5. EBS Magnetic (HDD) - Previous generation HDD
+   API Name: standard
+   IOPS: 40 to 200
+   Used For: workloads where data is infrequently used
+   Volume size: 1 GiB to 1 Tib
+
+===========================================================================================
+Lecture 28 - volumes and snapshots LAB
+
+1. EBC volumes will be in the same availability zone as your EC2 instance is running.
+2. To move an EC2 volume from one AZ to another, take a snapshot of it, create an AMI out of that snapshot, and use that AMI to launch the EC2 instance in a new AZ.
+3. To move an EC2 volume from one region to another, take a snapshot of it, create an AMI out of it, and copy the AMI from one region to another region and use that copied AMI to launch the EC2 instance in the new region.
+4. Volumes exist in EBS, think of EBS as a virtual hard disk drive
+5. Snapshots exist in S3, Think of snapshot as a photograph of the hard disk
+6. Snapshots is a current state of the volume
+7. Snapshots are incremental - if we take a snapshot and then if we modify a file and then take a snapshot, whatever the changes that has been made are only replicated to S3, basically the delta
+8. If it is a first snapshot then it may take a little bit of time.
+9. To create a snapshot for Amazon EBS volumes that serves as a root devices, you should stop the instance before taking the snapshot
+10. However there is nothing stopping to take the snapshot while the instance is running
+11. You can create AMI's from both volumes and snapshots.
+12. You can directly create the AMI from the volume, you do not to have to create the snapshot
+13. You can change the EBS volume size on the fly including the storage type.
+
+===========================================================================================
+Lecture 29 - AMI types (EBS vs instance store)
+
+You can select your AMI based on:
+ 1. Region (See region and AZ)
+ 2. OS
+ 3. Architecture (32 or 64-bit)
+ 4. Launch permissions
+ 5. Storage for the root device (Root device volume)
+    A. Instance Store (Ephemeral storage)
+    B. EBS backed volumes
+
+For EBS volumes:
+The root device for an instance launched from the AMI is an Amazon EBS volume.
+This volume will be created from an Amazon EBS snapshot.
+
+For Instance store:
+The root device for an instance launched from the AMI is an instance store volume.
+This volume will be created from a template stored in S3.
+
+1. Instance store volumes are sometimes called Ephemeral storage. That means if an instance is stopped for some reason, all the data is going to lost.
+2. Instance store volumes can't be stopped. If the underlying host fails, all the data will be lost.
+3. EBS backed instances can be stopped. Data will not be lost if the instance is stopped.
+4. You can reboot the instances that were backed by both instance store or EBS backed , you will not lose your data.
+5. By default, both ROOT volumes will be deleted on termination. However, with EBS volumes, you can tell AWS to keep the root device volume
+
+===========================================================================================
+Lecture 30 - Encrypted root device volumes and snapshots - LAB
+
+1. Snapshots of encrypted volumes are encrypted automatically
+2. Volumes restored from encrypted snapshots are encrypted automatically.
+3. You can share the snapshots, but only if they are unencrypted.
+4. These snapshots can be shared with other AWS accounts or made public, but they have to unencrypted.
+5. You can now encrypt root device volumes upon creation of the EC2 instance.
+6. If you want to do the same in traditional way, Create a snapshot of the unencrypted root device volume, then create a copy of the snapshot and select the encryption option, and then create an AMI of the encrypted snapshot, use that AMI to launch the encrypted root volume instance.
+
+===========================================================================================
+Lecture 31 - AWS this week
+
+===========================================================================================
+Lecture 32 - Amazon cloud watch
+1. It is a tool that monitors all AWS services and all the applications that tun on AWS.
+2. It is a performance monitor tool
+3. CLoudWatch with EC2 will monitor events every 5 minutes by default.
+4. You can have 1 minute intervals by turning on detailed monitoring.
+5. We can create cloudwatch alarms which trigger notifications.
+
+
+
+It can monitor the following things.
+   Compute:
+      1. EC2 instances
+      2. Autoscaling groups
+      3. Elastic load balancers
+      4. Route53 health checks
+  Storage @ content delivery
+      1. EBS volumes
+      2. Storage gateways
+      3. CloudFront
+
+Host level metrics consists of:
+1. CPU
+2. network
+3. disk
+4. Status check
+5. Underlying hypervisors
+6. Underlying EC2 instances
+
+AWS cloud trail:
+1. It is basically like a CCTV for AWS environment
+2. It increases visibility into your user and resource activity by recording AWS management console actions and API calls.
+3. We can identify which users and accounts called AWS, the source IP address from which the calls were made and when etc
+
+
+6. CloudWatch is all about performance, while cloudtrail is all about auditing
+
+
+===========================================================================================
+Lecture 33 - Amazon cloud watch LAB
+
+Create EC2 instance --> Configure instance details --> Enable cloudwatch detailed monitoring.
+
+Standard monitoring = 5 minutes
+Detailed monitoring = 1 minute
+
+What can I do with AWS CloudWatch
+1. Dashboards  - Create dashboards to see what's happening with AWS environement
+2. Alarms - When a particular threshold are hit you can configure to get the notifications.
+3. Events - CliudWtach events help you respond to change state in AWS resources
+4. Logs - CloudWatch logs help you to aggregate, monitor and store logs.
+
+===========================================================================================
+Lecture 34 - AWS command line
+
+Goto IAM -> Create User -> Give some name --> Only check programmatic access only  --> permissions  --> create group  --> admin group  --> admin access  --> apply -- Click next next --> create users
+some commands:
+1. move .pem file to some directory  --> mv abc.pem DirectoyName
+2. chmod 400 abc.pem
+3. ssh ec2-user@{ipv4 of the ec2 instance} -i {abc.pem}
+4. y
+5. Will be in EC2 instance
+6. sudo su
+7. aws s3 ls
+8. You may have to configure the credentials
+9. aws configure
+10. enter the access key, secret key
+11. region name: us-east-1
+12. default output format - just press ENTER
+13. aws s3 ls
+14. aws s3 mb s3://{unique bucket name}
+Like this we can pretty much do provision EC2 instance for example or s3 bucker etc
+
+1. Go to root directory --> ~
+2. ls -latr --> you will see .aws  --> cd to .aws  --> ls  --> you will see credentials, config
+3. nano credentials --> you will see access key and secret key
+
+this is a security issue.
+
+Better to use the roles we cover in the next session
+
+1. You can interact with AWS from any where in the world using CLI
+2. Need to setup in IAM
+Goto IAM -> Create User -> Give some name --> Only check programmatic access only  --> permissions  --> create group  --> admin group  --> admin access  --> apply -- Click next next --> create users
+
+===========================================================================================
+Lecture 35 - AWS Roles - LAB
+
+IAM --> roles --> create role --> use the service we wanna use this role for, EC2 --> permissions --> admin access --> next --> provide role name  --> create role
+
+On command line
+
+1. Go to root directory --> ~
+2. ls -latr --> you will see .aws
+3. rm -rf .aws
+4. If we do for example aws s3 ls  --> we won't be able to access it because we removed the config file
+
+5. On console, goto the runninc EC2 instance --> actions --> instance settings --> attach/replace IAM role  --> select the role we want to attach
+6. Go back to the console and do the aws s3 ls  --> we should be able to access it now
+
+7. Roles are much more secure than storing the keys in individual EC2 instances
+8. Roles are easier to match
+9. Roles can be assigned to EC2 instances after role has been created from both command line and from console
+10. Roles are universal, can use any where
+
+===========================================================================================
+Lecture 36 - Boot strap scripts - LAB
+
+Boot strap scripts used to automate the EC2 instance deployments
+
+1. Create the EC2 instance (During the configuring the EC2 instance, assign the admin role, create the admin role if it is not exists)
+2. On advanced details section -->  select As text radio
+#!/bin/bash  (This is the path to the interpreter)
+yum update -y
+yum install httpd -y (To install the apache service)
+service httpd start
+chkconfig httpd on
+cd /var/www/html
+echo "<html><h1>Welcome Vijay</h1></html>"
+> index.html
+aws s3 mb s3://{unique bucket name}
+aws s3 cp index.html s3://{above bucket name}
+
+Launch the EC2 instance
+
+===========================================================================================
+Lecture 37 - EC2 instance metadata - LAB
+
+1. Continuation from the previous section
+
+Goto Command line terminal go to the EC2 instance root directory
+1. sudo su
+2. curl http://169.254.169.254/latest/user-data/
+3. curl http://169.254.169.254/latest/user-data/  > bootstrat.txt
+4. cat bootstrap.txt
+5. curl http://169.254.169.254/latest/meta-data/
+6. curl http://169.254.169.254/latest/meta-data/local-ipv4
+7. curl http://169.254.169.254/latest/meta-data/public-ipv4
+8. curl http://169.254.169.254/latest/meta-data/local-ipv4  > myip.txt
+
+1. Metadata is used to get the information about the EC2 instance
+2. curl http://169.254.169.254/latest/meta-data/  -- Gives us the metadata about the EC2 instance
+3. curl http://169.254.169.254/latest/user-data/  -- Gives us the boot strap script which we written
+
+===========================================================================================
+Lecture 38 - Elastic file system - LAB
+
+1. EFS is a file storage service for EC2.
+2. Allows easier and provides simple interface that allows you to create and configure file system quickly and easily.
+3. With EFS, storage capacity is elastic, as you add and remove it will automatically grow and shrink.
+4. Just like EBS, with only one difference where with EBS you can only mount your virtual disk to one EC2 instance. You can't share one EBS volume to 2 different EC2 instances, We can do with EFS unlike EBS
+
+1. Supports the network file system version4 (NFSv4) protocol
+2. Only you pay for the storage we use (no pre-provisioning required)
+3. Can scale up to the petabytes
+4. Can support thousands on concurrent NFS conncetions
+5. Data is stored in different AZ's with in a Region
+6. Read after write consistency
+
+===========================================================================================
+Lecture 39 - EC2 placement groups
+
+3 placement groups.
+
+Only certain types of instances can be placed in placement groups such as compute optimized, GPU, memory optimized, storage optimized.
+
+1. Clustered placement group: Instances will be placed very very next to each other with in a single AZ
+--> Grouping of instances with in a single AZ.
+--> Recommended for applications that need low latency, high network throughput, or both.
+--> Only certain instances can be placed into a clustered placement group.
+
+2. Spread placement group
+
+--> EC2 instances that will be placed in separate underlying hardware
+--> Recommended for applications that have a small number of critical instances that should be kept separate
+--> it can be in many different AZ's within a region
+--> Spread placement groups have a specific limitation that you can only have a maximum of 7 running instances per Availability Zone.
+
+3. Partitioned placement group
+
+--> Multiple EC2 instances grouped together and placed in one rack and another set of EC2 instances into another rack and so on.
+--> Allowing you to isolate the impact of the hardware failure.
+--> Multiple EC2 instances HDFS, HBase and Cassandra.
+--> it can be in many different AZ's within a region.
+
+The name we specify for the placement group must be unique per AWS account
+
+AWS recommends homogeneous instances with in clustered placement group
+You can't merge placement groups
+You can't move the existing EC2 instance into placement group, instead create an AMI form the instance launch the new EC2 instance form that AMI into a placement group.
+
+
+===========================================================================================
+Lecture 40 - Quiz
+
+===========================================================================================
+Lecture 41 - AWS databases
+
+Relational databases comes in 6 flavours on AWS  (OLTP)
+1. SQL Server
+2. Oracle
+3. MySQL server
+4. PostgresSQL
+5. Amazon Aurora
+6. MariaDB
+
+Relational databases has two key features
+1. Multiple AZ - For disaster recovery
+2. Read replicas - For performance
+
+1. With Multi AZ - AWS will automatically point to another AZ if one fails for a reason
+2. With replicas, you are actually replicating into the secondary database all the contents from primary, so you will have an exact copy.
+In this case if the primary database fails over for any reason connection to replicated DB automatically lost. This is only useful for performance.
+
+Non-relational databases 2008 -09
+collection = table
+document = row
+Key Value pairs = fields
+
+It is just a JSON
+
+
+What is DataWarehousing?
+Used for business intelligence purposes. Used to pull very large and complex sets of data. Usually used by management to do queries on.
+
+OLTP: Online Transaction processing
+OLAP: Online Transaction analytics processing
+for both of them the query you run in a different way
+OLTP : Pulling the data for Order number 12121212, pulls out name, date, address etc
+OLAP: ((Sum of radios sold in area1) * unit sale price + (Sum of radios sold in area 2) * unit sale price) - unit price
+
+OLAP is more complicated
+
+Data warehousing databases use different types of architecture both from a database perspective and infrastructure layer.
+
+Amazon's datawarehouse solution is called RedShift.
+
+Elastic cache:
+Elastic cache is a webservice that makes it easy to deploy, operate and scale an in-memory cache in the cloud. The service improves the performance of the application by allowing you to retrieve the information from fats, managed, in-memory caches, instead of relying on slower disk-based databases.
+
+Elastic cache supports two open-source in-memory caching engines
+1. Memcached
+2. Redis
+
+Dynamo DB - Amazon's no SQL solution
+Redshift - Amamzon's Datawarehousing solution (OLAP)
+Elastic cache - Memcached, Redis - Amazon's caching solution
+Elastic cache is to speed up the performance of existing databases frequent identical queries
+
+
+===========================================================================================
+Lecture 42 - Creating the RDS instance
+
+1. RDS runs on virtual machines, we can't ssh into the RDS instances
+2. We can't login into these operating systems however
+3. Patching of the OS and DB is Amazon's responsibility
+4. RDS is not serverless, it does on VM
+5. Amazon's Aurora is serverless, only exception to this DB.
+
+===========================================================================================
+Lecture 43 - RDS - Backup's, Multi AZ & Read replicas
+
+There are two types of Backups
+
+1. Automated backups
+2. Database snapshots
+
+Automated Backups:
+1. Automated backups allow you to recover your database to any point in time with in a "retention period".
+2. Retention period can be between 1 and 35 days.
+3. Automated backups will take a full daily snapshot and also store full transactional logs throughout the day.
+4. When you do a recovery, AWS will look for a latest daily back up, and apply transactional logs relevant to that day.
+5. This allows you to do a full point in time recovery down to a second, within the retention period.
+6. Automated backups are enabled by default, and and the backup data will be stored in the s3 bucket, you will ge the free space of size equal to the size of the database. So, if you have RDS instance of space 10GB, you will get 10gb worth of space
+7. Backups are taken with in a configured window.
+8. During the backup window, storage I/O may be suspended while your data being backed up and you may experience elevated latency.
+
+
+Database snapshots
+1. This will be done manually (i.e they are user initiated)
+2. They are stored even after you delete the original RDS instance, unlike automated backups.
+3. Before you terminating the RDS instance it will ask us whether we want to take the snapshot of the latest DB.
+
+
+When you restore an instance via either an automated backup or manual snapshot, the restored version of the DB will be a new RDS instance with a new DNS endpoint.
+
+Encryption at Rest
+
+1. Encryption at rest supported for MySQL, Oracle, SQL server, PostgresSQL, MariaDB and Aurora.
+2. Encryption is done using the AWS key management service (KMS) service.
+3. Once we enable the encryption on RDS instance, the data stored at rest in underlying storage is encrypted, as are it's automated backups, read replicas, and snapshots.
+
+
+Multi AZ
+Multi AZ is only available for MySQL, server, SQL Server, Oracle, Postgres, MariaDB. Aurora has a separate architecture it comes complete fault tolerance.
+
+
+Read Replica:
+1. Read replicas allow to have a read only copy of your production DB.
+2. This is achieved by using asynchronous replication from the primary RDS instance to the read replica.
+3.  Wil b used for heavy-read only DB workloads.
+4. Read replicas available for MySQL Server, Postgres, Maria DB, Oracle, Aurora
+5. Used for scaling, not for Disaster Recovery
+6. Must have automatic backups turned on in order to deploy a read replica
+7. You can have up to 5 read replica of any DB.
+8. You can have read replicas for read replica but watch for replication latency
+9. Each read replica will have it's own DNS endpoint
+10. You can have read replicas that you can have multi AZ turned on
+11. You can create read replicas of Multi AZ source DB
+12. Read replicas can be promoted to it's own Databases. Replication will no linger work
+13. You can have a read replica in a complete different region.
+
+===========================================================================================
+Lecture 44 - RDS - Backup's, Multi AZ & Read replicas - LAB
+
+1. Open any Running RDS instance  --> Click on Modify  --> Yes Multi AZ
+
+===========================================================================================
+Lecture 45 - Dynamo DB
+
+This an Amazon's no SQL database solution (Opposite of RDS)
+
+1. Dynamo DB is a fast, flexible NoSql DB service for applications that require consistent, single digit millisecond latency at any scale.
+2. It is fully managed, supports both document and key-value data models.
+3. It's flexible data model and reliable performance make is a great fit for mobile, web, gaming, ad-tech, IoT, and many other applications.
+
+Basics of Dynamo
+1. It stores on SSD storage hence it is so fast
+2. Spread across three geographically distinct data centers
+3. Eventual Consistent reads (this is you will get by default) - If you need the consistency after 1 second consider this consistency
+4. Strongly consistent reads - If you need the consistency in less than 1 second then consider this consistency
+
+===========================================================================================
+Lecture 46 - RedShift warehousing solution in AWS world
+
+1. Amazon Redshift is a fast and powerful, fully managed, peta-byte scale data warehouse service in the cloud.
+2. Customers can start with $0.25 per hour with no commitments or upfront costs and scale to petabyte or more for $1000 per terabyte per year, less than a 10th of most other datawarehousing solutions.
+
+Redshift can be configured as follows
+
+A. You can have single node of up to 160GB
+B. You can have multi node
+
+In multi node solution,
+you will have one lead node and up to 128 compute nodes
+Lead node is responsible for client communication and receive queries
+Compute nodes, stores the data + perform queries + computations
+
+Advanced compression:
+1. It uses colomn level compression than row level because each colomn will have same data type so it is easy to compress.
+2. It employs multiple compression techniques and can often achieve significant compression than traditional datawarehousing compression techniques.
+3. It doesn;t requires indices or materialized views that way it uses less space than traditional relational DB systems.
+4. When loading data into an empty table, Redshift automatically fills the sample data and calculates the most appropriate compression technique
+
+Massively parallel processing (MPP)
+Amazon Redshift automatically distribute data and query load across all nodes.
+Amazon's redshift makes it easy to add additional nodes behind the leader node to your warehouse as the warehouse grows to maintain the fats query performance
+
+Backups:
+1. Enabled by default with a 1 day retention period and maximum is 35 days
+2. Redshift always attempts to maintain at least 3 copies (Original + replica in the compute node + a backup in the s3)
+3. Redshift can also asychronously replicate your snapshots to S3 in another region for disaster recovery.
+4. Only priced for compute nodes and not for the leader node.
+5. You will be charged for backups and also for data transfers (Only with in a VPC, not outside of it)
+
+
+Security considerations
+1. In communicating with redshoft it ialways going to be Encrypted in transit using SSL
+2. Encrypted at rest using AES-256 encryption
+3. By default Redshift takes care of the key management, but you can manage through HSM (Hardware security model) also using AWS key management service
+
+Redshift Availability
+1. Available in only in one zone, no multi-AZ
+2. You can restore snapshots to different AZ in the event of am outage
+
+
+===========================================================================================
+Lecture 47 - Amazon's Aurora
+
+1. Amazon aurora is a mysql compatible, realtion database engine that combines the speed and availability of high-end commercial databases  databases with the simplicity and  cost-effectiveness of databases.
+2. Amazon provides upto 5 times better performance that mysql, at a price point one tenth that of a commercial database while deliver similar performance and availability
+
+Things to know about Aurora
+1. Starts with 10GB, increments 10GB up to 64TB (Storage auto scaling)
+2. Compute resources can scale up to 32vCPUs and 244GB of memory
+2. 2 copies of your data is contained in each AZ, with a minimum of 3 AZ's, so a total of 6 copies of your data.
+3. Aurora is designed to transparently handle the loss of data up to 2 copies of data without affecting the database write availability and up to 3 copies of data without affecting the read availability.
+4. Aurora storage is self-healing. Data blocks and disks are continuously scans for any errors and resolves automatically.
+
+Two replicas
+Aurora replicas - 15
+Mysql replicas - 5
+
+Look at the table at 2 minutes 23 seconds on the video
+
+
+Backups:
+1. Automated backups are always enabled, This do not impact the performance
+2. You can take the snapshots, this is also doesn't impact the performance.
+3. You can share the snapshot with the other AWS accounts.
+4. 2 types of replicas available, Aurora replica and mysql replica. Automated failover is only available with aurora replica.
+
+
+===========================================================================================
+Lecture 48 - ElastiCache
+
+Use Elastcacahe to improve the Database and web app performance
+Redis is multi AZ
+You can do backups and restore od Redis
+
+===========================================================================================
+Lecture 49 - Summary
+
+
+===========================================================================================
+Lecture 50 - Quiz (19 of 24 correct)
+
+Following are wrong
+
+Which set of RDS database engines is currently available?
+With new RDS DB instances, automated backups are enabled by default.
+If I wanted to run a database on an EC2 instance, which of the following storage options would Amazon recommend?
+If you want your application to check RDS for an error, have it look for an ______ node in the response from the Amazon RDS API.
+When you add a rule to an RDS DB security group, you must specify a port number or protocol.
